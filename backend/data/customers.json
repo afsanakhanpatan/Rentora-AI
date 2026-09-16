@@ -1,0 +1,18 @@
+[
+  {
+    "customerId": "CUS-1789381196352",
+    "name": "Test User",
+    "email": "test2@rentora.com",
+    "phone": "9999999999",
+    "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "createdAt": "2026-09-14T10:19:56.352Z"
+  },
+  {
+    "customerId": "CUS-1789381347618",
+    "name": "Afsana Khan Patan",
+    "email": "afsanakhanpatan564@gmail.com",
+    "phone": "+919989068105",
+    "passwordHash": "f0e3bcbe69c799a0d54e131486388104997dc6bce976f3784170db462db64254",
+    "createdAt": "2026-09-14T10:22:27.618Z"
+  }
+]

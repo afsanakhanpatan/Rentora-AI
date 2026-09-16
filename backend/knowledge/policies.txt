@@ -1,0 +1,31 @@
+Rentora Rental Policies
+
+Required documents:
+Customers must provide a valid driving license and one government-issued identification document when required for the rental.
+
+Cancellation:
+Customers should cancel at least 24 hours before the rental start time to avoid cancellation-related charges.
+
+Late return:
+Returning a vehicle late may result in additional charges according to the rental conditions.
+
+Fuel:
+Customers should return the vehicle with a similar fuel level to the level provided at pickup.
+
+Vehicle condition:
+Customers are responsible for the vehicle during the rental period and should return it in reasonable condition.
+
+Booking confirmation:
+A booking is confirmed only after the customer explicitly confirms the rental.
+
+Availability accuracy:
+The AI must never claim that a vehicle is available unless the current Rentora inventory indicates that the vehicle is available.
+
+City accuracy:
+If a customer specifies a city, the AI must only provide vehicle information from that city unless the customer explicitly asks about another city or asks for alternatives elsewhere.
+
+Pricing accuracy:
+Rental prices must be calculated from the current Rentora vehicle price per day. The AI must not invent prices.
+
+Unknown information:
+If Rentora's available data does not contain the requested information, the AI should clearly say that the information is not currently available rather than making up an answer.

@@ -1,0 +1,54 @@
+Rentora Vehicle Inventory
+
+The vehicle inventory in this document is a reference for Rentora's current rental catalog.
+
+Important:
+The backend vehicle inventory is the authoritative source for current vehicle availability, city, vehicle type, passenger capacity, and price.
+
+Chirala:
+- Honda Activa 6G | Scooter | ₹500/day | 2 passengers
+- Royal Enfield Classic 350 | Motorbike | ₹900/day | 2 passengers
+- Hyundai i20 | Car | ₹1500/day | 5 passengers
+- Maruti Swift | Car | ₹1300/day | 5 passengers
+- Yamaha MT-15 | Motorbike | ₹850/day | 2 passengers
+
+Ongole:
+- TVS Jupiter | Scooter | ₹450/day | 2 passengers
+- Honda Shine | Motorbike | ₹550/day | 2 passengers
+- Maruti Baleno | Car | ₹1400/day | 5 passengers
+- Tata Punch | Car | ₹1600/day | 5 passengers
+- Hero Sprint MTB | Cycle | ₹250/day | 1 passenger
+
+Vijayawada:
+- Honda Activa 6G | Scooter | ₹550/day | 2 passengers
+- TVS Apache RTR 160 | Motorbike | ₹750/day | 2 passengers
+- Hyundai Creta | Car | ₹2200/day | 5 passengers
+- Maruti Swift | Car | ₹1400/day | 5 passengers
+- Firefox Road Runner | Cycle | ₹300/day | 1 passenger
+
+Guntur:
+- Suzuki Access 125 | Scooter | ₹500/day | 2 passengers
+- Honda Hornet 2.0 | Motorbike | ₹800/day | 2 passengers
+- Hyundai i20 | Car | ₹1500/day | 5 passengers
+- Tata Nexon | Car | ₹1900/day | 5 passengers
+- Hercules MTB | Cycle | ₹250/day | 1 passenger
+
+Nellore:
+- Honda Dio | Scooter | ₹450/day | 2 passengers
+- Bajaj Pulsar 150 | Motorbike | ₹650/day | 2 passengers
+- Maruti Brezza | Car | ₹1800/day | 5 passengers
+- Maruti WagonR | Car | ₹1200/day | 5 passengers
+
+Visakhapatnam:
+- TVS Ntorq 125 | Scooter | ₹600/day | 2 passengers
+- Royal Enfield Hunter 350 | Motorbike | ₹1000/day | 2 passengers
+- Hyundai Creta | Car | ₹2300/day | 5 passengers
+- Kia Sonet | Car | ₹2000/day | 5 passengers
+
+Tirupati:
+- Honda Activa 6G | Scooter | ₹550/day | 2 passengers
+- Yamaha FZ | Motorbike | ₹700/day | 2 passengers
+- Maruti Ertiga | Car | ₹2100/day | 7 passengers
+- Maruti Swift | Car | ₹1400/day | 5 passengers
+
+The backend inventory must be treated as the final authority if this reference document differs from live inventory data.

@@ -1,0 +1,40 @@
+Rentora Frequently Asked Questions
+
+Q: What can Rentora AI help me with?
+A: Rentora AI can help customers find vehicles, check availability, understand rental prices, compare vehicles, understand rental policies, and get booking assistance.
+
+Q: Which cities does Rentora serve?
+A: Rentora currently has vehicle inventory in Chirala, Ongole, Vijayawada, Guntur, Nellore, Visakhapatnam, and Tirupati.
+
+Q: What types of vehicles are available?
+A: Rentora currently lists cars, motorbikes, scooters, and cycles.
+
+Q: Can I ask about vehicles in a specific city?
+A: Yes. Rentora can provide vehicle information for a requested city using the current vehicle inventory.
+
+Q: What if I ask for a vehicle that does not exist in a city?
+A: Rentora should clearly state that the requested vehicle is not currently listed in that city and can show vehicles that are actually available there.
+
+Q: How is the rental price calculated?
+A: The rental price is based on the vehicle's current price per day multiplied by the rental duration.
+
+Q: Can I ask how much a vehicle costs for several days?
+A: Yes. Rentora calculates the total using the actual vehicle's daily rental price and the requested number of days.
+
+Q: What documents are required?
+A: A valid driving license and one government-issued identification document may be required for the rental.
+
+Q: Can I cancel a booking?
+A: Yes. Customers should cancel at least 24 hours before the rental start time to avoid cancellation-related charges.
+
+Q: What happens if I return the vehicle late?
+A: A late return may result in additional charges.
+
+Q: Can Rentora recommend a vehicle?
+A: Yes. Rentora can recommend a vehicle based on factors such as city, vehicle type, passenger capacity, and rental requirements, using the actual vehicle inventory.
+
+Q: Can Rentora answer general questions?
+A: Yes. Rentora AI can answer general questions naturally. However, rental-specific facts such as vehicles, prices, cities, and availability must come from Rentora's authoritative data.
+
+Q: What happens if Rentora does not have the information I requested?
+A: Rentora should say that the information is not currently available rather than inventing an answer.
