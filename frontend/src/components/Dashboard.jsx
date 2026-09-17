@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
+const API_BASE_URL = "";
+
 const CITIES = [
   "All cities",
   "Chirala",
@@ -14,19 +16,19 @@ const CITIES = [
 const TYPES = [
   "All types",
   "car",
-  "motorbike",
+  "bike",
   "scooter",
   "cycle",
 ];
 
 const TYPE_LABELS = {
   car: "Car",
-  motorbike: "Motorbike",
+  bike: "Bike",
   scooter: "Scooter",
   cycle: "Cycle",
 };
 
-function Dashboard({ setActivePage }) {
+function Dashboard({ setActivePage, setSelectedVehicle }) {
   const [vehicles, setVehicles] = useState([]);
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("All cities");
@@ -42,24 +44,33 @@ function Dashboard({ setActivePage }) {
         setError("");
 
         const response = await fetch(
-          "http://localhost:5000/api/vehicles"
+          `${API_BASE_URL}/api/vehicles`
         );
 
         if (!response.ok) {
-          throw new Error("Could not load vehicles.");
+          throw new Error(
+            `Vehicle API returned ${response.status}`
+          );
         }
 
         const data = await response.json();
 
-        setVehicles(
-          Array.isArray(data)
-            ? data
-            : data.vehicles || []
-        );
+        const vehicleList = Array.isArray(data)
+          ? data
+          : Array.isArray(data.vehicles)
+          ? data.vehicles
+          : [];
+
+        if (!vehicleList.length) {
+          throw new Error("No vehicles were returned.");
+        }
+
+        setVehicles(vehicleList);
       } catch (err) {
-        console.error(err);
+        console.error("Dashboard vehicle loading error:", err);
+
         setError(
-          "We couldn't load the available rentals. Please make sure the backend is running."
+          "We couldn't load the available rentals right now."
         );
       } finally {
         setLoading(false);
@@ -73,32 +84,31 @@ function Dashboard({ setActivePage }) {
     const query = search.toLowerCase().trim();
 
     return vehicles.filter((vehicle) => {
+      const vehicleName = String(
+        vehicle.name || ""
+      ).toLowerCase();
+
+      const vehicleCity = String(
+        vehicle.city || vehicle.location || ""
+      ).toLowerCase();
+
+      const vehicleCategory = String(
+        vehicle.category || vehicle.type || ""
+      ).toLowerCase();
+
       const matchesSearch =
         !query ||
-        String(vehicle.name || "")
-          .toLowerCase()
-          .includes(query) ||
-        String(vehicle.city || vehicle.location || "")
-          .toLowerCase()
-          .includes(query) ||
-        String(vehicle.type || "")
-          .toLowerCase()
-          .includes(query) ||
-        String(vehicle.category || "")
-          .toLowerCase()
-          .includes(query);
-
-      const vehicleCity =
-        vehicle.city || vehicle.location || "";
+        vehicleName.includes(query) ||
+        vehicleCity.includes(query) ||
+        vehicleCategory.includes(query);
 
       const matchesCity =
         city === "All cities" ||
-        vehicleCity.toLowerCase() === city.toLowerCase();
+        vehicleCity === city.toLowerCase();
 
       const matchesType =
         type === "All types" ||
-        String(vehicle.type || "").toLowerCase() ===
-          type.toLowerCase();
+        vehicleCategory === type.toLowerCase();
 
       return (
         matchesSearch &&
@@ -115,35 +125,71 @@ function Dashboard({ setActivePage }) {
   ).length;
 
   const cityCount = new Set(
-    vehicles.map(
-      (vehicle) => vehicle.city || vehicle.location
-    )
+    vehicles
+      .map((vehicle) =>
+        vehicle.city || vehicle.location
+      )
+      .filter(Boolean)
   ).size;
 
-  const getVehicleIcon = (vehicleType) => {
-    switch (vehicleType) {
+  const getVehicleCategory = (vehicle) => {
+    return String(
+      vehicle.category || vehicle.type || ""
+    ).toLowerCase();
+  };
+
+  const getVehicleIcon = (vehicle) => {
+    const category = getVehicleCategory(vehicle);
+
+    switch (category) {
       case "car":
         return "🚗";
+
+      case "bike":
       case "motorbike":
         return "🏍️";
+
       case "scooter":
         return "🛵";
+
       case "cycle":
         return "🚲";
+
       default:
         return "🚘";
     }
   };
 
-  const getTypeLabel = (vehicleType) => {
+  const getTypeLabel = (vehicle) => {
+    const category = getVehicleCategory(vehicle);
+
     return (
-      TYPE_LABELS[vehicleType] ||
-      vehicleType ||
+      TYPE_LABELS[category] ||
+      category ||
       "Vehicle"
     );
   };
 
   const handleRent = (vehicle) => {
+    const selectedVehicle = {
+      id: vehicle.id,
+      name: vehicle.name,
+      category:
+        vehicle.category ||
+        vehicle.type ||
+        "",
+      city:
+        vehicle.city ||
+        vehicle.location ||
+        "",
+      pricePerDay:
+        Number(vehicle.pricePerDay) || 0,
+      available:
+        vehicle.available !== false,
+      durationDays: duration,
+    };
+
+    setSelectedVehicle(selectedVehicle);
     setActivePage("assistant");
   };
 
@@ -658,9 +704,9 @@ function Dashboard({ setActivePage }) {
 
       <div className="explore-container">
 
-        {/* HERO */}
         <section className="explore-hero">
           <div className="hero-content">
+
             <div className="hero-label">
               ✦ Rentora Rentals
             </div>
@@ -677,10 +723,12 @@ function Dashboard({ setActivePage }) {
             </p>
 
             <div className="stats-row">
+
               <div className="stat-box">
                 <span className="stat-number">
                   {totalVehicles}
                 </span>
+
                 <span className="stat-label">
                   Vehicles listed
                 </span>
@@ -690,6 +738,7 @@ function Dashboard({ setActivePage }) {
                 <span className="stat-number">
                   {availableVehicles}
                 </span>
+
                 <span className="stat-label">
                   Currently available
                 </span>
@@ -699,20 +748,23 @@ function Dashboard({ setActivePage }) {
                 <span className="stat-number">
                   {cityCount}
                 </span>
+
                 <span className="stat-label">
                   Rental cities
                 </span>
               </div>
+
             </div>
           </div>
         </section>
 
-        {/* FILTERS */}
         <section className="filter-card">
+
           <div className="filter-grid">
 
             <div className="field">
               <label>SEARCH</label>
+
               <input
                 className="search-input"
                 value={search}
@@ -725,6 +777,7 @@ function Dashboard({ setActivePage }) {
 
             <div className="field">
               <label>CITY</label>
+
               <select
                 className="filter-select"
                 value={city}
@@ -733,7 +786,10 @@ function Dashboard({ setActivePage }) {
                 }
               >
                 {CITIES.map((item) => (
-                  <option key={item} value={item}>
+                  <option
+                    key={item}
+                    value={item}
+                  >
                     {item}
                   </option>
                 ))}
@@ -742,6 +798,7 @@ function Dashboard({ setActivePage }) {
 
             <div className="field">
               <label>VEHICLE TYPE</label>
+
               <select
                 className="filter-select"
                 value={type}
@@ -750,10 +807,13 @@ function Dashboard({ setActivePage }) {
                 }
               >
                 {TYPES.map((item) => (
-                  <option key={item} value={item}>
+                  <option
+                    key={item}
+                    value={item}
+                  >
                     {item === "All types"
                       ? item
-                      : getTypeLabel(item)}
+                      : TYPE_LABELS[item]}
                   </option>
                 ))}
               </select>
@@ -762,6 +822,7 @@ function Dashboard({ setActivePage }) {
           </div>
 
           <div className="duration-area">
+
             <div>
               <div className="duration-title">
                 HOW LONG DO YOU NEED IT?
@@ -769,9 +830,11 @@ function Dashboard({ setActivePage }) {
             </div>
 
             <div className="duration-buttons">
+
               {[1, 3, 7].map((days) => (
                 <button
                   key={days}
+                  type="button"
                   className={
                     "duration-button " +
                     (duration === days
@@ -782,16 +845,22 @@ function Dashboard({ setActivePage }) {
                     setDuration(days)
                   }
                 >
-                  {days} {days === 1 ? "day" : "days"}
+                  {days}{" "}
+                  {days === 1
+                    ? "day"
+                    : "days"}
                 </button>
               ))}
+
             </div>
           </div>
+
         </section>
 
-        {/* RESULTS */}
         <div className="results-header">
+
           <div>
+
             <h2 className="results-title">
               Available rentals
             </h2>
@@ -800,15 +869,19 @@ function Dashboard({ setActivePage }) {
               Prices below are calculated for{" "}
               <strong>
                 {duration}{" "}
-                {duration === 1 ? "day" : "days"}
+                {duration === 1
+                  ? "day"
+                  : "days"}
               </strong>
               .
             </p>
+
           </div>
 
           <div className="result-count">
             {filteredVehicles.length} results
           </div>
+
         </div>
 
         <div className="vehicle-grid">
@@ -825,6 +898,7 @@ function Dashboard({ setActivePage }) {
 
           {!loading && error && (
             <div className="error-card">
+
               <div className="empty-icon">
                 ⚠️
               </div>
@@ -833,7 +907,10 @@ function Dashboard({ setActivePage }) {
                 Unable to load rentals
               </h3>
 
-              <p>{error}</p>
+              <p>
+                {error}
+              </p>
+
             </div>
           )}
 
@@ -841,6 +918,7 @@ function Dashboard({ setActivePage }) {
             !error &&
             filteredVehicles.length === 0 && (
               <div className="empty-card">
+
                 <div className="empty-icon">
                   🔎
                 </div>
@@ -850,17 +928,21 @@ function Dashboard({ setActivePage }) {
                 </h3>
 
                 <p>
-                  Try another city, vehicle type
-                  or search term.
+                  Try another city, vehicle
+                  type or search term.
                 </p>
+
               </div>
             )}
 
           {!loading &&
             !error &&
             filteredVehicles.map((vehicle) => {
+
               const vehiclePrice =
-                Number(vehicle.pricePerDay) || 0;
+                Number(
+                  vehicle.pricePerDay
+                ) || 0;
 
               const totalPrice =
                 vehiclePrice * duration;
@@ -873,16 +955,19 @@ function Dashboard({ setActivePage }) {
                 vehicle.location ||
                 "Location unavailable";
 
+              const category =
+                getVehicleCategory(vehicle);
+
               return (
                 <article
                   className="vehicle-card"
                   key={vehicle.id}
                 >
+
                   <div className="vehicle-top">
+
                     <div className="vehicle-icon">
-                      {getVehicleIcon(
-                        vehicle.type
-                      )}
+                      {getVehicleIcon(vehicle)}
                     </div>
 
                     <span
@@ -896,11 +981,13 @@ function Dashboard({ setActivePage }) {
                         ? "● Available"
                         : "● Unavailable"}
                     </span>
+
                   </div>
 
                   <div className="vehicle-body">
+
                     <div className="vehicle-type">
-                      {getTypeLabel(vehicle.type)}
+                      {getTypeLabel(vehicle)}
                     </div>
 
                     <h3 className="vehicle-name">
@@ -912,22 +999,28 @@ function Dashboard({ setActivePage }) {
                     </div>
 
                     <div className="vehicle-meta">
+
                       <span className="meta-pill">
                         👥{" "}
                         {vehicle.passengers ||
-                          2} passengers
+                          (category === "car"
+                            ? 5
+                            : 2)}{" "}
+                        passengers
                       </span>
 
                       <span className="meta-pill">
-                        {vehicle.category ||
-                          getTypeLabel(
-                            vehicle.type
-                          )}
+                        {TYPE_LABELS[category] ||
+                          category ||
+                          "Vehicle"}
                       </span>
+
                     </div>
 
                     <div className="vehicle-bottom">
+
                       <div>
+
                         <span className="price-label">
                           From
                         </span>
@@ -943,9 +1036,11 @@ function Dashboard({ setActivePage }) {
                         <span className="price-total">
                           ₹{totalPrice} total
                         </span>
+
                       </div>
 
                       <button
+                        type="button"
                         className="rent-button"
                         disabled={!isAvailable}
                         onClick={() =>
@@ -956,12 +1051,17 @@ function Dashboard({ setActivePage }) {
                           ? "Rent now →"
                           : "Unavailable"}
                       </button>
+
                     </div>
+
                   </div>
+
                 </article>
               );
             })}
+
         </div>
+
       </div>
     </div>
   );
